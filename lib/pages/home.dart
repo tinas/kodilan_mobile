@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kodilan_mobile/assets/icons/kodilan_icon.dart';
-import 'package:kodilan_mobile/components/home_search.dart';
+import 'package:kodilan_mobile/components/search_button.dart';
 import 'package:kodilan_mobile/components/logo.dart';
 import 'package:kodilan_mobile/constant/colors.dart';
 
@@ -45,7 +45,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                   padding: EdgeInsets.only(top: titleArea),
                   child: Padding(
                     padding: EdgeInsets.only(left: 16.0, right: 16.0),
-                    child: HomeSearchWidget(),
+                        child: SearchButtonWidget(),
                   ),
                 ),
               ),
