@@ -7,7 +7,7 @@ class LogoWidget extends StatelessWidget {
     Text textGenerator(String text, Color color) {
       return Text(
         text,
-        style: TextStyle(color: color, fontSize: 23),
+        style: TextStyle(color: color, fontSize: 26),
       );
     }
 
