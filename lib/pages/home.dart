@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kodilan_mobile/assets/icons/kodilan_icon.dart';
 import 'package:kodilan_mobile/components/search_button.dart';
 import 'package:kodilan_mobile/components/logo.dart';
+import 'package:kodilan_mobile/components/post_list.dart';
 import 'package:kodilan_mobile/constant/colors.dart';
 
 class Home extends StatefulWidget {
@@ -21,75 +22,80 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
     );
   }
 
+  TabBar get _tabBar => TabBar(
+        labelStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+        labelColor: CustomColors.black,
+        indicatorColor: CustomColors.green,
+        unselectedLabelColor: CustomColors.tabDisable,
+        tabs: [
+          Tab(text: 'Bugün'),
+          Tab(text: 'Bu hafta'),
+          Tab(text: 'Bu ay'),
+          Tab(text: 'Hepsi'),
+        ],
+        controller: controller,
+      );
+
   @override
   Widget build(BuildContext context) {
     final titleArea = MediaQuery.of(context).padding.top;
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            leading: Padding(
-              padding: EdgeInsets.only(left: 16.0),
-              child: LogoWidget(),
-            ),
-            leadingWidth: MediaQuery.of(context).size.width,
-            actions: [
-              IconButton(icon: Icon(KodilanIcon.info), onPressed: () => {}),
-            ],
-            pinned: true,
-            expandedHeight: 180.0,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Center(
-                child: Container(
-                  padding: EdgeInsets.only(top: titleArea),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 16.0, right: 16.0),
+      body: NestedScrollView(
+        floatHeaderSlivers: true,
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverOverlapAbsorber(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              sliver: SliverAppBar(
+                title: LogoWidget(),
+                actions: [
+                  IconButton(
+                      icon: Icon(
+                        KodilanIcon.info,
+                        size: 20,
+                      ),
+                      onPressed: () => {}),
+                ],
+                pinned: true,
+                floating: true,
+                expandedHeight: 150.0,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Center(
+                    child: Container(
+                      padding: EdgeInsets.only(top: titleArea),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 16, right: 16),
                         child: SearchButtonWidget(),
+                      ),
+                    ),
+                  ),
+                ),
+                forceElevated: innerBoxIsScrolled,
+                bottom: PreferredSize(
+                  preferredSize: _tabBar.preferredSize,
+                  child: ColoredBox(
+                    color: CustomColors.background,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 16, right: 16),
+                      child: _tabBar,
+                    ),
                   ),
                 ),
               ),
-            ),
-            bottom: TabBar(
-              labelStyle: TextStyle(fontSize: 13),
-              labelColor: CustomColors.black,
-              indicatorColor: CustomColors.green,
-              indicatorSize: TabBarIndicatorSize.label,
-              unselectedLabelColor: CustomColors.tabDisable,
-              tabs: [
-                Tab(text: 'Bugün'),
-                Tab(text: 'Bu Hafta'),
-                Tab(text: 'Bu Ay'),
-                Tab(text: 'Tüm İlanlar'),
-              ],
-              controller: controller,
-            ),
-          ),
-          // SliverList(
-          SliverFillRemaining(
-            child: TabBarView(
-              controller: controller,
-              children: <Widget>[
-                Container(
-                  color: CustomColors.background,
-                  child: Center(child: Text("Tab bugün")),
-                ),
-                Container(
-                  color: CustomColors.background,
-                  child: Center(child: Text("Tab bu hafta")),
-                ),
-                Container(
-                  color: CustomColors.background,
-                  child: Center(child: Text("Tab bu ay")),
-                ),
-                Container(
-                  color: CustomColors.background,
-                  child: Center(child: Text("Tab tüm ilanlar")),
-                ),
-              ],
-            ),
-          ),
-        ],
+            )
+          ];
+        },
+        body: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
+          controller: controller,
+          children: <Widget>[
+            PostListWidget(),
+            PostListWidget(),
+            PostListWidget(),
+            PostListWidget(),
+          ],
+        ),
       ),
     );
   }
